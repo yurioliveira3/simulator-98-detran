@@ -119,4 +119,4 @@ As 1.500 questões foram extraídas do projeto [teorical-questions-detran](https
 
 ---
 
-Feito com utilizando opencode, modelos Opus 4.7 (plan) + Qwen3.6 Plus (exec)
+- Feito utilizando opencode, modelos Opus 4.7 (plan) + Qwen3.6 Plus (exec)

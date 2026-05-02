@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulado DETRAN 98</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== HOME SCREEN ===== -->
+<div id="screen-home" class="win98-window">
+  <div class="win98-titlebar">
+    <span class="win98-titlebar-text">🚗 Simulado DETRAN 98</span>
+    <button class="win98-close-btn" type="button" onclick="confirmCloseApp()">✕</button>
+  </div>
+  <div class="win98-body">
+    <div class="home-title">Simulado DETRAN 98 🚗</div>
+    <div class="home-subtitle">Escolha o modo de simulado</div>
+
+    <div id="loading-msg" class="loading-message">Carregando questões...</div>
+
+    <div id="mode-cards" class="mode-cards hidden">
+      <div class="mode-card" onclick="startNormalMode()">
+        <div class="mode-card-icon">📋</div>
+        <div class="mode-card-name">Modo Normal</div>
+        <div class="mode-card-desc">30 questões • 30 minutos • Igual ao DETRAN</div>
+      </div>
+      <div class="mode-card" onclick="startMarathonMode()">
+        <div class="mode-card-icon">🏃</div>
+        <div class="mode-card-name">Modo Maratona</div>
+        <div class="mode-card-desc">Até 1.500 questões • Sem limite de tempo • Treine sem parar</div>
+      </div>
+      <div class="mode-card" onclick="startFlashcardMode()">
+        <div class="mode-card-icon">🃏</div>
+        <div class="mode-card-name">Modo Flashcard</div>
+        <div class="mode-card-desc">1.500 questões • Estude no seu ritmo • Vire o card para ver a resposta</div>
+      </div>
+    </div>
+  </div>
+  <div class="status-bar">Boa sorte! 💙</div>
+</div>
+
+<!-- ===== QUIZ SCREEN ===== -->
+<div id="screen-quiz" class="win98-window hidden">
+  <div class="win98-titlebar">
+    <span class="win98-titlebar-text">🚗 Simulado DETRAN 98</span>
+    <button class="win98-close-btn" type="button" id="quiz-close-btn" onclick="handleCloseQuiz()">✕</button>
+  </div>
+  <div class="win98-body">
+    <div class="quiz-header">
+      <div>
+        <div class="quiz-counter" id="quiz-counter">Questão 1 de 30</div>
+        <div class="quiz-score hidden" id="quiz-score">✅ 0 acertos | ❌ 0 erros</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="win98-btn hidden" id="btn-exit-marathon" type="button" onclick="confirmExitMarathon()">🚪 Sair</button>
+        <div class="timer-display" id="timer-display">30:00</div>
+      </div>
+    </div>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      <div class="progress-bar-text" id="progress-text">0/30</div>
+    </div>
+
+    <div class="question-tags" id="question-tags"></div>
+    <div class="question-placa" id="question-placa"></div>
+    <div class="question-enunciado" id="question-enunciado"></div>
+
+    <div class="alternatives-list" id="alternatives-list"></div>
+
+    <div class="feedback-panel hidden" id="feedback-panel">
+      <div class="feedback-title" id="feedback-title"></div>
+      <div class="feedback-comment" id="feedback-comment"></div>
+    </div>
+
+    <div class="quiz-actions">
+      <button class="win98-btn" id="btn-confirm" type="button" onclick="confirmAnswer()" disabled>Confirmar</button>
+      <button class="win98-btn hidden" id="btn-next" type="button" onclick="nextQuestion()">Próxima →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FLASHCARD SCREEN ===== -->
+<div id="screen-flashcard" class="win98-window hidden">
+  <div class="win98-titlebar">
+    <span class="win98-titlebar-text">🃏 Flashcards</span>
+    <button class="win98-close-btn" type="button" onclick="goHome()">✕</button>
+  </div>
+  <div class="win98-body">
+    <div class="flashcard-header">
+      <div class="flashcard-title">🃏 Flashcards</div>
+      <button class="win98-btn" type="button" onclick="goHome()">🏠 Início</button>
+    </div>
+
+    <div class="flashcard-scene">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="flashcard-face flashcard-front">
+          <div class="flashcard-label">PERGUNTA</div>
+          <div class="flashcard-content" id="flashcard-front-content"></div>
+          <div class="flashcard-hint">Clique para ver a resposta</div>
+        </div>
+        <div class="flashcard-face flashcard-back">
+          <div class="flashcard-label">RESPOSTA</div>
+          <div class="flashcard-content" id="flashcard-back-content"></div>
+          <div class="flashcard-hint">Clique para voltar à pergunta</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard-actions">
+      <button class="win98-btn" type="button" onclick="prevFlashcard()">← Anterior</button>
+      <button class="win98-btn" type="button" onclick="nextFlashcard()">Próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RESULT SCREEN ===== -->
+<div id="screen-result" class="win98-window hidden">
+  <div class="win98-titlebar">
+    <span class="win98-titlebar-text">🚗 Simulado DETRAN 98</span>
+    <button class="win98-close-btn" type="button" onclick="confirmCloseApp()">✕</button>
+  </div>
+  <div class="win98-body">
+    <div class="result-icon" id="result-icon"></div>
+    <div class="result-title" id="result-title"></div>
+
+    <div class="result-stats">
+      <div class="result-stat">
+        <div class="result-stat-label" id="result-stat-label"></div>
+        <div class="result-stat-value" id="result-stat-value"></div>
+      </div>
+      <div class="result-stat">
+        <div class="result-stat-label">Percentual</div>
+        <div class="result-stat-value" id="result-percent"></div>
+      </div>
+    </div>
+
+    <div class="result-difficulty-stats hidden" id="result-difficulty-stats"></div>
+
+    <div class="result-progress-container hidden" id="result-progress-container">
+      <div class="result-progress-fill" id="result-progress-fill"></div>
+      <div class="result-progress-text" id="result-progress-text"></div>
+    </div>
+
+    <div class="result-message" id="result-message"></div>
+
+    <div class="result-actions">
+      <button class="win98-btn" id="btn-retry" type="button"></button>
+      <button class="win98-btn" type="button" onclick="goHome()">🏠 Início</button>
+    </div>
+
+    <div class="result-actions" style="margin-top:8px;">
+      <button class="win98-btn hidden" id="btn-gabarito" type="button" onclick="openGabarito()">📋 Ver Gabarito</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: TIME UP ===== -->
+<div class="modal-overlay" id="modal-time-up">
+  <div class="modal-window">
+    <div class="win98-titlebar">
+      <span class="win98-titlebar-text">⏰ Tempo Esgotado!</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-message" id="modal-time-up-msg"></div>
+      <div class="modal-actions">
+        <button class="win98-btn" type="button" onclick="closeModal('modal-time-up'); showResult();">Ver Resultado</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: CONFIRM EXIT NORMAL ===== -->
+<div class="modal-overlay" id="modal-confirm-exit-normal">
+  <div class="modal-window">
+    <div class="win98-titlebar">
+      <span class="win98-titlebar-text">⚠️ Encerrar Simulado?</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-message" id="modal-exit-normal-msg"></div>
+      <div class="modal-actions">
+        <button class="win98-btn" type="button" onclick="closeModal('modal-confirm-exit-normal')">Continuar</button>
+        <button class="win98-btn" type="button" onclick="closeModal('modal-confirm-exit-normal'); showResult();">Ver Resultado</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: CONFIRM EXIT MARATHON ===== -->
+<div class="modal-overlay" id="modal-confirm-exit">
+  <div class="modal-window">
+    <div class="win98-titlebar">
+      <span class="win98-titlebar-text">⚠️ Sair da Maratona?</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-message" id="modal-exit-msg"></div>
+      <div class="modal-actions">
+        <button class="win98-btn" type="button" onclick="closeModal('modal-confirm-exit')">Continuar</button>
+        <button class="win98-btn" type="button" onclick="closeModal('modal-confirm-exit'); showResult();">Sair mesmo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: CONFIRM CLOSE APP ===== -->
+<div class="modal-overlay" id="modal-confirm-close-app">
+  <div class="modal-window">
+    <div class="win98-titlebar">
+      <span class="win98-titlebar-text">⚠️ Sair do Simulado?</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-message" id="modal-close-app-msg">Tem certeza que deseja sair?</div>
+      <div class="modal-actions">
+        <button class="win98-btn" type="button" id="btn-stay" onclick="closeModal('modal-confirm-close-app')">Ficar</button>
+        <button class="win98-btn" type="button" id="btn-leave" onclick="handleLeave()">Sair</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: GABARITO ===== -->
+<div class="modal-overlay" id="modal-gabarito">
+  <div class="modal-window modal-window-large">
+    <div class="win98-titlebar">
+      <span class="win98-titlebar-text">📋 Gabarito</span>
+      <button class="win98-close-btn" type="button" onclick="closeModal('modal-gabarito')">✕</button>
+    </div>
+    <div class="modal-body modal-body-scroll">
+      <div id="gabarito-list"></div>
+    </div>
+    <div class="modal-actions" style="padding:8px 16px 16px;">
+      <button class="win98-btn" type="button" onclick="closeModal('modal-gabarito')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/state.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/timer.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/modes.js"></script>
+<script src="js/flashcard.js"></script>
+<script src="js/result.js"></script>
+
+</body>
+</html>

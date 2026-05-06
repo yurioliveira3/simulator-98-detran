@@ -726,6 +726,12 @@ body {
   white-space: pre-wrap;
 }
 
+.gabarito-time {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #808080;
+}
+
 /* ===== MODE CARDS (3 items) ===== */
 .mode-cards {
   display: flex;

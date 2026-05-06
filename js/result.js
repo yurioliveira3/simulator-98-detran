@@ -1,6 +1,15 @@
 const DIFFICULTY_COLORS = { facil: '#008000', intermediario: '#c0c000', dificil: '#800000' };
 const DIFFICULTY_LABELS = { facil: 'Fácil', intermediario: 'Intermediário', dificil: 'Difícil' };
 
+function formatTime(seconds) {
+  if (seconds >= 60) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}m ${s}s`;
+  }
+  return `${seconds}s`;
+}
+
 function showResult() {
   stopTimer();
 
@@ -118,6 +127,7 @@ function openGabarito() {
           </div>
           ${!item.isCorrect ? `<div class="gabarito-answer correct"><strong>Resposta correta:</strong> ${q.alternativa_correta}</div>` : ''}
           <div class="gabarito-comment"><strong>Comentário:</strong> ${q.comentario}</div>
+            ${item.timeSpent !== undefined ? `<div class="gabarito-time">⏱ Tempo: ${formatTime(item.timeSpent)}</div>` : ''}
         </div>
       </div>
     `;

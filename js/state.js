@@ -16,6 +16,7 @@ const state = {
   },
   answeredQuestions: [],
   flashcardFlipped: false,
+  questionStartTime: null,
 };
 
 let allQuestions = [];
@@ -44,6 +45,7 @@ function resetState() {
     dificil: { correct: 0, total: 0 },
   };
   state.answeredQuestions = [];
+state.questionStartTime = null;
 }
 
 function showScreen(id) {

@@ -2,6 +2,7 @@ function renderQuestion() {
   const q = state.questions[state.currentIndex];
   const total = state.questions.length;
 
+  state.questionStartTime = Date.now();
   state.answered = false;
   state.selectedAlternative = null;
   state.currentAlternatives = buildAlternatives(q);
@@ -92,6 +93,7 @@ function confirmAnswer() {
     question: q,
     selectedText: state.currentAlternatives[state.selectedAlternative].text,
     isCorrect,
+    timeSpent: Math.round((Date.now() - state.questionStartTime) / 1000),
   });
 
   const btns = document.querySelectorAll('.alternative-btn');

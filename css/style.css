@@ -602,6 +602,7 @@ body {
   align-items: center;
   gap: 8px;
   margin-bottom: 6px;
+  padding-left: 5%;
 }
 
 .difficulty-label {
@@ -611,7 +612,7 @@ body {
 }
 
 .difficulty-bar-bg {
-  flex: 1;
+  flex: 0 1 70%;
   background: #fff;
   border: 2px solid;
   border-color: #808080 #ffffff #ffffff #808080;
